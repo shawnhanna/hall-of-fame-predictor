@@ -20,7 +20,7 @@ public class Hofdata {
 
     
     public static void main(String[] args) throws IOException {
-        String file = "Batting_CSV.csv";
+        String file = "Batting.csv";
         
         File datafile = new File(file);
         if(!datafile.exists()) {
