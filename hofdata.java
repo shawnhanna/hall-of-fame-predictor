@@ -38,24 +38,35 @@ public class Hofdata {
         //has column information
         BufferedReader br = new BufferedReader(new FileReader(file));
         String dataLine;
-        String temp[];
+        String temp[], get[];
         dataLine = br.readLine();//get first line in file
-        //split by comma
-        temp = dataLine.split(",");
+        //split by comma and add final column for number of seasons a player played in
+        //this column will be used to throw out players that do not meet the 10 season min
+        get = dataLine.split(",");
+        temp = new String[get.length+1];
+        for(int a = 0; a< get.length; a++){
+            temp[a] = get[a];
+        }
+        temp[get.length] = "Seasons Played";
         /*System.out.println("The Data Contains the Following (in this order)...");
         for(int x = 0; x < temp.length;x++){
             System.out.println(temp[x]);
         }*/
         
         //create matrix (lines-1 x data columns)
-        String data[][] = new String[totalLines-1][temp.length];
+        String data[][] = new String[totalLines-1][temp.length+1];
         //fill the matrix
         String nextLine;
         for(int y = 0; y<totalLines-1;y++){
-            String temp2[];//temp2 for each line
+            String temp2[], line[];//temp2 & line for each line
             nextLine = br.readLine();//get line
-            temp2 = nextLine.split(",");//split line
-            for(int z = 0; z < temp.length ; z++){
+            line = nextLine.split(",");//split line
+            temp2 = new String[line.length+1];//split line
+            for(int a = 0; a< line.length; a++){
+                temp2[a] = line[a];
+            }
+            temp2[line.length] = "0";
+            for(int z = 0; z < temp2.length ; z++){
                 data[y][z] = temp2[z];//add line to data matrix
             }
         }
@@ -78,6 +89,7 @@ public class Hofdata {
         int players = 0;//count number of players
         //read in first player from data
         current  = data[0];
+        int seasons = 1;
         for(int w = 1; w < totalLines-1; w++){
             /*for every line check for the player id
             * since we know the ID's are in alphabetical order we can run 
@@ -90,23 +102,43 @@ public class Hofdata {
             */
             next = data[w];
             int value;
+            int year;
+            int era;
             if(current[0].equals(next[0])){//ID match
+                seasons++;//increase number of seasons played
                 for(int a = 1; a < temp.length ; a++){
-                    if(a<5){//first 4 columns dont really matter
+                    if(a==1){//year matters, add up the years and average them over
+                        //the number of seasons so we can put a player in a
+                        //era
+                        year = Integer.parseInt(current[a]) + Integer.parseInt(next[a]);
+                        current[a] = Integer.toString(year);//add up years
+                    }
+                    else if(a> 1 & a<5){//columns 2, 3, and 4 dont really matter and get thrown out
                         current[a] = current[a] + next[a];//update stats
                     }
-                    else{//after that we need to make sure we are adding the values
+                    else if(a>4 & a< temp.length){//after that we need to make sure we are adding the values
                         //and not the strings
                         value = Integer.parseInt(current[a]) + Integer.parseInt(next[a]);
                         current[a] = Integer.toString(value);
                         
                     }
+                    
                 }
             }
             else{//Id does not match
                 //System.out.println("Career Stats Calculated for " + current[0]);
+                //get the average years
+                era = Integer.parseInt(current[1])/seasons;//get average season
+                current[1] = Integer.toString(era);//put into current array
+                System.out.print(seasons + " ");
+                current[temp.length-1] = Integer.toString(seasons);
+                System.out.println(current[temp.length-1]);
+                //reset seasons
+                seasons = 1;
                 players++;//update player count so we know how bit the Array List is
                 newData.add(current);//add current player to ArrayList
+                System.out.print(newData.get(players-1)[0] + " - ");
+                System.out.println(newData.get(players-1)[temp.length-1]);
                 current = next;//move next player to current player
             }
             
@@ -125,7 +157,7 @@ public class Hofdata {
             BufferedWriter newWrite = new BufferedWriter(tf);
             //write the header line
             for(int c = 0; c<temp.length; c++){
-                if(c==0){
+                if(c==0 || c==1){
                     newWrite.write(temp[c] + ",");
                 }
                 else if(c>4 & c <temp.length-1){
@@ -137,7 +169,7 @@ public class Hofdata {
             }
             for(int d = 0; d<players;d++){
                 for(int x = 0; x < temp.length ;x++){
-                    if(x==0){
+                    if(x==0 || x==1){
                         newWrite.write(newData.get(d)[x] + ",");
                     }
                     else if(x>4 & x <temp.length-1){
