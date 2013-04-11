@@ -33,9 +33,6 @@ public class FeatureCreator {
 		for (double num : centers)
 			System.out.println("Center: " + num);
 
-		double[] sums = new double[numClusters];
-		double[] numInThatCluster = new double[numClusters];
-
 		boolean doStop = false;
 		int numIterations = 0;
 		while (!doStop) {
@@ -51,16 +48,23 @@ public class FeatureCreator {
 						minDistance = theD;
 					}
 				}
-				sums[bestIndex] += data[i];
-				numInThatCluster[bestIndex] += 1;
+				if (assignments[i] != bestIndex) {
+					doStop = false;
+					assignments[i] = bestIndex;
+				}
 			}
 
-			for (int i = 0; i < centers.length; i++) {
-				int newCenter = (int) (sums[i] / numInThatCluster[i]);
-				if (newCenter != centers[i]) {
-					centers[i] = newCenter;
-					doStop = false;
+			for (int j = 0; j < centers.length; j++) {
+				double newCenter = 0;
+				int numInCluster = 0;
+				for (int i = 0; i < data.length; i++) {
+					if (assignments[i] == j) {
+						newCenter += data[i];
+						numInCluster++;
+					}
 				}
+				newCenter = newCenter / numInCluster;
+				centers[j] = newCenter;
 			}
 			System.out.println("Iteration number: " + numIterations);
 		}
@@ -77,7 +81,7 @@ public class FeatureCreator {
 	}
 
 	public static void main(String[] args) {
-		double[] test = new double[40];
+		double[] test = new double[100000];
 
 		test[0] = 0;
 		test[1] = 0;
@@ -95,7 +99,7 @@ public class FeatureCreator {
 		test[13] = 36;
 
 		for (int i = 0; i < test.length; i++) {
-			test[i] = (Math.random() * 40);
+			test[i] = (Math.random() * 50);
 			System.out.println("D[" + i + "] = " + test[i]);
 		}
 
