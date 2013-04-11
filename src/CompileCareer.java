@@ -25,6 +25,7 @@ public class CompileCareer {
 		readFile();
 		compileCareer();
 		outputData();
+		System.out.println("Done");
 	}
 
 	void readFile() {

@@ -9,16 +9,32 @@ import java.util.ArrayList;
 
 public class FeatureCreator {
 
-	int[] getClusters(int[] data, int numClusters) {
+	static double[] getClusters(double[] data, int numClusters) {
 		// /initialize the centers of the clusters
 		// 1) pick a random center from all the points
-		int[] centers = new int[numClusters];
+		double[] centers = new double[numClusters];
+		int[] assignments = new int[data.length];
+
 		for (int i = 0; i < numClusters; i++) {
-			centers[i] = data[(int) (Math.random() * ((data.length) + 1))];
+			centers[i] = data[(int) (Math.random() * ((data.length)))];
+			boolean stop = false;
+			while (!stop) {
+				stop = true;
+				for (int j = i - 1; j >= 0; j--) {
+					if (centers[j] == centers[i]) {
+						centers[i] = data[(int) (Math.random() * ((data.length)))];
+						stop = false;
+						break;
+					}
+				}
+			}
 		}
 
+		for (double num : centers)
+			System.out.println("Center: " + num);
+
 		double[] sums = new double[numClusters];
-		int[] numInThatCluster = new int[numClusters];
+		double[] numInThatCluster = new double[numClusters];
 
 		boolean doStop = false;
 		int numIterations = 0;
@@ -33,10 +49,9 @@ public class FeatureCreator {
 					if (theD < minDistance) {
 						bestIndex = j;
 						minDistance = theD;
-						
 					}
 				}
-				sums[bestIndex] += data[bestIndex];
+				sums[bestIndex] += data[i];
 				numInThatCluster[bestIndex] += 1;
 			}
 
@@ -47,8 +62,9 @@ public class FeatureCreator {
 					doStop = false;
 				}
 			}
+			System.out.println("Iteration number: " + numIterations);
 		}
-		System.out.println("Found best clusters. took " +numIterations);
+		System.out.println("Found best clusters. took " + numIterations);
 		return centers;
 	}
 
@@ -58,5 +74,33 @@ public class FeatureCreator {
 			out[i] = Integer.parseInt(in[i]);
 		}
 		return out;
+	}
+
+	public static void main(String[] args) {
+		double[] test = new double[40];
+
+		test[0] = 0;
+		test[1] = 0;
+		test[2] = 3;
+		test[3] = 3;
+		test[4] = 3;
+		test[5] = 4;
+		test[6] = 12;
+		test[7] = 12;
+		test[8] = 8;
+		test[9] = 8;
+		test[10] = 33;
+		test[11] = 34;
+		test[12] = 35;
+		test[13] = 36;
+
+		for (int i = 0; i < test.length; i++) {
+			test[i] = (Math.random() * 40);
+			System.out.println("D[" + i + "] = " + test[i]);
+		}
+
+		double[] clusters = getClusters(test, 3);
+		for (double center : clusters)
+			System.out.println("Center: " + center);
 	}
 }
