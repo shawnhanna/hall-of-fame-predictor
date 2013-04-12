@@ -41,7 +41,7 @@ public class CompileCareer {
 		// count the total number of lines that we will be dealing with for for
 		// loops
 		int totalLines;
-		totalLines = countLines(file);
+		totalLines = FeatureCreator.countLines(file);
 
 		System.out.println("Total number of lines in Data File: " + totalLines);
 
@@ -211,25 +211,6 @@ public class CompileCareer {
 
 		System.out.println("Total Number of Players: " + numPlayers);
 
-	}
-
-	// function to count the number of lines
-	public static int countLines(String filename) {
-		try {
-			LineNumberReader reader = new LineNumberReader(new FileReader(
-					filename));
-			int cnt = 0;
-
-			while ((reader.readLine()) != null) {
-			}
-
-			cnt = reader.getLineNumber();
-			reader.close();
-			return cnt;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return -1;
-		}
 	}
 
 	public static void main(String[] args) {

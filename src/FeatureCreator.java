@@ -1,4 +1,9 @@
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.LineNumberReader;
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * 
@@ -80,7 +85,7 @@ public class FeatureCreator {
 		return out;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		double[] test = new double[100000];
 
 		test[0] = 0;
@@ -99,12 +104,62 @@ public class FeatureCreator {
 		test[13] = 36;
 
 		for (int i = 0; i < test.length; i++) {
-			test[i] = (Math.random() * 50);
-			System.out.println("D[" + i + "] = " + test[i]);
+			// test[i] = (Math.random() * 50);
+			// System.out.println("D[" + i + "] = " + test[i]);
 		}
 
-		double[] clusters = getClusters(test, 3);
+		test = arrayFromFile("batting.txt");
+
+		double[] clusters = getClusters(test, 4);
+		Arrays.sort(clusters);
 		for (double center : clusters)
 			System.out.println("Center: " + center);
+
+		System.out.println(classFromClusters(clusters, 0.3));
+	}
+
+	public static double[] arrayFromFile(String file)
+			throws FileNotFoundException {
+		Scanner s = new Scanner(new File(file));
+		double[] out = new double[countLines("batting.txt")];
+		int i = 0;
+		while (s.hasNextDouble()) {
+			double d = s.nextDouble();
+			out[i++] = d;
+		}
+		return out;
+	}
+
+	// function to count the number of lines
+	public static int countLines(String filename) {
+		try {
+			LineNumberReader reader = new LineNumberReader(new FileReader(
+					filename));
+			int cnt = 0;
+
+			while ((reader.readLine()) != null) {
+			}
+
+			cnt = reader.getLineNumber();
+			reader.close();
+			return cnt;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	static int classFromClusters(double[] clusters, double value) {
+		double minDistance = Double.MAX_VALUE;
+		int bestIndex = -1;
+		for (int j = 0; j < clusters.length; j++) {
+			double theD = Math.abs(value - clusters[j]);
+			if (theD < minDistance) {
+				bestIndex = j;
+				minDistance = theD;
+			}
+		}
+
+		return bestIndex;
 	}
 }
