@@ -16,7 +16,13 @@ public class HOFPredictor {
 		// System.out.println(bp);
 		System.out.println("Starting # of players; " + players.size());
 		removeIllegal(players);
-		System.out.println("Starting # of players; " + players.size());
+		System.out.println("New # of players; " + players.size());
+
+		double[] centers = getBattingAverageClusters(players, 5);
+
+		for (double center : centers)
+			System.out.println("BA cluster: " + center);
+
 	}
 
 	public static ArrayList<BattingYear> readFile(String filename) {
@@ -59,7 +65,7 @@ public class HOFPredictor {
 		Iterator<BattingPlayer> it = players.iterator();
 		while (it.hasNext()) {
 			BattingPlayer player = it.next();
-			if (player.numSeasons() < 10) {
+			if (player.numSeasons() < 10 || player.AB < 150) {
 				it.remove();
 			}
 		}
@@ -96,4 +102,14 @@ public class HOFPredictor {
 		new HOFPredictor();
 	}
 
+	static double[] getBattingAverageClusters(ArrayList<BattingPlayer> players,
+			int numClusters) {
+		double[] averages = new double[players.size()];
+		for (int i = 0; i < players.size(); i++) {
+			averages[i] = ((double) players.get(i).H) / players.get(i).AB;
+		}
+		double[] clusters = FeatureCreator.getClusters(averages, numClusters);
+		Arrays.sort(clusters);
+		return clusters;
+	}
 }

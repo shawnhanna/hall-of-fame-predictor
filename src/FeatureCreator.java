@@ -88,25 +88,10 @@ public class FeatureCreator {
 	public static void main(String[] args) throws FileNotFoundException {
 		double[] test = new double[100000];
 
-		test[0] = 0;
-		test[1] = 0;
-		test[2] = 3;
-		test[3] = 3;
-		test[4] = 3;
-		test[5] = 4;
-		test[6] = 12;
-		test[7] = 12;
-		test[8] = 8;
-		test[9] = 8;
-		test[10] = 33;
-		test[11] = 34;
-		test[12] = 35;
-		test[13] = 36;
-
-		for (int i = 0; i < test.length; i++) {
+		//for (int i = 0; i < test.length; i++) {
 			// test[i] = (Math.random() * 50);
 			// System.out.println("D[" + i + "] = " + test[i]);
-		}
+		//}
 
 		test = arrayFromFile("batting.txt");
 
@@ -162,4 +147,5 @@ public class FeatureCreator {
 
 		return bestIndex;
 	}
+	
 }
