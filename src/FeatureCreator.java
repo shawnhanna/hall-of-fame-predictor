@@ -35,9 +35,6 @@ public class FeatureCreator {
 			}
 		}
 
-		for (double num : centers)
-			System.out.println("Center: " + num);
-
 		boolean doStop = false;
 		int numIterations = 0;
 		while (!doStop) {
@@ -71,9 +68,12 @@ public class FeatureCreator {
 				newCenter = newCenter / numInCluster;
 				centers[j] = newCenter;
 			}
-			System.out.println("Iteration number: " + numIterations);
+			if (numIterations % 100 == 0)
+				System.out
+						.println("Clustering - currently at iteration number: "
+								+ numIterations);
 		}
-		System.out.println("Found best clusters. took " + numIterations);
+		// System.out.println("Found best clusters. took " + numIterations);
 		return centers;
 	}
 
@@ -88,10 +88,10 @@ public class FeatureCreator {
 	public static void main(String[] args) throws FileNotFoundException {
 		double[] test = new double[100000];
 
-		//for (int i = 0; i < test.length; i++) {
-			// test[i] = (Math.random() * 50);
-			// System.out.println("D[" + i + "] = " + test[i]);
-		//}
+		// for (int i = 0; i < test.length; i++) {
+		// test[i] = (Math.random() * 50);
+		// System.out.println("D[" + i + "] = " + test[i]);
+		// }
 
 		test = arrayFromFile("batting.txt");
 
@@ -147,5 +147,9 @@ public class FeatureCreator {
 
 		return bestIndex;
 	}
-	
+
+	static double getTopPercentage(double[] data, double percent) {
+		Arrays.sort(data);
+		return data[(int) (data.length * (100.0 - percent) / 100.0)];
+	}
 }

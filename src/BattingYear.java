@@ -1,11 +1,13 @@
 public class BattingYear implements Comparable {
+	public static int ABthreshold = 100;
+	
 	public String playerID;
 	public int yearID;
 	public int stint;
 	public String teamID;
 	public String leagueID;
-	public int games;
-	public int gamesBatting;
+	public int G;
+	public int G_batting;
 	public int AB;
 	public int R;
 	public int H;
@@ -38,8 +40,8 @@ public class BattingYear implements Comparable {
 		stint = Integer.parseInt(ins[2]);
 		teamID = ins[3];
 		leagueID = ins[4];
-		games = Integer.parseInt(ins[5]);
-		gamesBatting = Integer.parseInt(ins[6]);
+		G = Integer.parseInt(ins[5]);
+		G_batting = Integer.parseInt(ins[6]);
 		AB = Integer.parseInt(ins[7]);
 		R = Integer.parseInt(ins[8]);
 		H = Integer.parseInt(ins[9]);
@@ -68,10 +70,10 @@ public class BattingYear implements Comparable {
 		if (AB < 30)
 			return false;
 
-		if (games < 20)
+		if (G < 20)
 			return false;
 
-		if (gamesBatting < 20)
+		if (G_batting < 20)
 			return false;
 
 		return true;
