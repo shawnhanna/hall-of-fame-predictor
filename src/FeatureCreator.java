@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.LineNumberReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -151,5 +152,38 @@ public class FeatureCreator {
 	static double getTopPercentage(double[] data, double percent) {
 		Arrays.sort(data);
 		return data[(int) (data.length * (100.0 - percent) / 100.0)];
+	}
+
+	static ArrayList<BattingPlayer> getPlayersEra(
+			ArrayList<BattingPlayer> players, int startYear, int endYear) {
+		ArrayList<BattingPlayer> retPlayers = new ArrayList<BattingPlayer>(
+				players.size() / 5);
+		for (int i = 0; i < players.size(); i++) {
+			BattingPlayer curP = players.get(i);
+			if (curP.getAverageYear() >= startYear
+					&& curP.getAverageYear() <= endYear) {
+				retPlayers.add(curP);
+			}
+		}
+		return retPlayers;
+	}
+
+	static double[] getBattingAverages(ArrayList<BattingPlayer> players) {
+		double[] averages = new double[players.size()];
+		for (int i = 0; i < players.size(); i++) {
+			averages[i] = ((double) players.get(i).H) / players.get(i).AB;
+		}
+		return averages;
+	}
+
+	static double[] getBattingAverageClusters(ArrayList<BattingPlayer> players,
+			int numClusters) {
+		double[] averages = new double[players.size()];
+		for (int i = 0; i < players.size(); i++) {
+			averages[i] = ((double) players.get(i).H) / players.get(i).AB;
+		}
+		double[] clusters = FeatureCreator.getClusters(averages, numClusters);
+		Arrays.sort(clusters);
+		return clusters;
 	}
 }

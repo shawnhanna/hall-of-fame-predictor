@@ -17,8 +17,7 @@ public class HOFPredictor {
 	public HOFPredictor() {
 		BattingPlayer.ABthreshold = 2000;
 		BattingYear.ABthreshold = 100;
-		
-		
+
 		players = null;
 		try {
 			players = getCareers("batting.csv", "nominations.csv");
@@ -34,7 +33,7 @@ public class HOFPredictor {
 		removeIllegal(players);
 		System.out.println("New # of players; " + players.size());
 
-		double[] averages = HOFPredictor.getBattingAverages(players);
+		double[] averages = FeatureCreator.getBattingAverages(players);
 		double[] centers = FeatureCreator.getClusters(averages, 5);
 
 		Arrays.sort(centers);
@@ -45,7 +44,7 @@ public class HOFPredictor {
 		System.out.println("Top 10% of batters: " + top10Perc);
 
 		String[] importantFields = { "AB", "H", "G", "HR", "battingAverage",
-				"top10perc" };
+				"top10perc", "2B", "3B", "RBI", "SB", "BB", "SO" };
 		try {
 			createARFFfile("outfile.arff", players, importantFields);
 		} catch (FileNotFoundException e) {
@@ -112,7 +111,7 @@ public class HOFPredictor {
 		Iterator<BattingPlayer> it = players.iterator();
 		while (it.hasNext()) {
 			BattingPlayer player = it.next();
-			if (!player.isValid || player.numSeasons() < 10 || player.AB < 150) {
+			if (!player.isValid()) {
 				it.remove();
 			}
 		}
@@ -155,32 +154,13 @@ public class HOFPredictor {
 		new HOFPredictor();
 	}
 
-	static double[] getBattingAverages(ArrayList<BattingPlayer> players) {
-		double[] averages = new double[players.size()];
-		for (int i = 0; i < players.size(); i++) {
-			averages[i] = ((double) players.get(i).H) / players.get(i).AB;
-		}
-		return averages;
-	}
-
-	static double[] getBattingAverageClusters(ArrayList<BattingPlayer> players,
-			int numClusters) {
-		double[] averages = new double[players.size()];
-		for (int i = 0; i < players.size(); i++) {
-			averages[i] = ((double) players.get(i).H) / players.get(i).AB;
-		}
-		double[] clusters = FeatureCreator.getClusters(averages, numClusters);
-		Arrays.sort(clusters);
-		return clusters;
-	}
-
 	static void createARFFfile(String filename,
 			ArrayList<BattingPlayer> players, String[] attributes)
 			throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(new File(filename));
 		pw.println("@RELATION HOF\n");
-		
-		//create attributes.  Edit if not numeric
+
+		// create attributes. Edit if not numeric
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].equals("top10perc"))
 				pw.println("@ATTRIBUTE " + attributes[i] + " {true,false}");
@@ -199,7 +179,7 @@ public class HOFPredictor {
 
 	public static boolean isTop10Percent(double average) {
 		if (average >= FeatureCreator.getTopPercentage(
-				getBattingAverages(players), 10)) {
+				FeatureCreator.getBattingAverages(players), 10)) {
 			return true;
 		}
 		return false;

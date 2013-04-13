@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class BattingPlayer implements Comparable {
@@ -34,8 +35,7 @@ public class BattingPlayer implements Comparable {
 	public int GIDP;
 	public int G_old;
 
-	public double battingAverage;
-
+	//User created stat/features
 	public boolean isValid = true;
 
 	public void addYear(BattingYear by) {
@@ -66,12 +66,30 @@ public class BattingPlayer implements Comparable {
 			GIDP += year.GIDP;
 			G_old += year.G_old;
 		}
+		isValid = isValid();
+	}
+
+	public boolean isValid() {
 		if (G < 100)
-			isValid = false;
+			return false;
 		if (G_batting < 100)
-			isValid = false;
+			return false;
 		if (AB < ABthreshold)
-			isValid = false;
+			return false;
+		if (numSeasons() < 10)
+			return false;
+		if ((2013 - getLastYear()) < 5)
+			return false;
+		return true;
+	}
+	
+	private int getLastYear(){
+		int max = -1;
+		for(int i=0; i<years.size(); i++){
+			if (years.get(i).yearID > max)
+				max = years.get(i).yearID;
+		}
+		return max;
 	}
 
 	public void setNomination(Nomination n) {
