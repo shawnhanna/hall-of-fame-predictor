@@ -35,7 +35,7 @@ public class BattingPlayer implements Comparable {
 	public int GIDP;
 	public int G_old;
 
-	//User created stat/features
+	// User created stat/features
 	public boolean isValid = true;
 
 	public void addYear(BattingYear by) {
@@ -70,22 +70,22 @@ public class BattingPlayer implements Comparable {
 	}
 
 	public boolean isValid() {
-		if (G < 100)
-			return false;
-		if (G_batting < 100)
-			return false;
+		/*
+		 * if (G < 100) return false; if (G_batting < 100) return false;
+		 */
 		if (AB < ABthreshold)
 			return false;
+
 		if (numSeasons() < 10)
 			return false;
 		if ((2013 - getLastYear()) < 5)
 			return false;
 		return true;
 	}
-	
-	private int getLastYear(){
+
+	private int getLastYear() {
 		int max = -1;
-		for(int i=0; i<years.size(); i++){
+		for (int i = 0; i < years.size(); i++) {
 			if (years.get(i).yearID > max)
 				max = years.get(i).yearID;
 		}

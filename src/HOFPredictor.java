@@ -22,13 +22,10 @@ public class HOFPredictor {
 		try {
 			players = getCareers("batting.csv", "nominations.csv");
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			System.exit(1);
 		}
 
-		// for (BattingPlayer bp : players)
-		// System.out.println(bp);
 		System.out.println("Starting # of players; " + players.size());
 		removeIllegal(players);
 		System.out.println("New # of players; " + players.size());
@@ -45,6 +42,7 @@ public class HOFPredictor {
 
 		String[] importantFields = { "AB", "H", "G", "HR", "battingAverage",
 				"top10perc", "2B", "3B", "RBI", "SB", "BB", "SO" };
+
 		try {
 			createARFFfile("outfile.arff", players, importantFields);
 		} catch (FileNotFoundException e) {
@@ -132,7 +130,7 @@ public class HOFPredictor {
 			} else {
 				BattingPlayer newPlayer = new BattingPlayer();
 				newPlayer.addYear(years.get(i));
-				System.out.println("Added new Player: " + newPlayer);
+				// System.out.println("Added new Player: " + newPlayer);
 				players.add(newPlayer);
 				currPlayer = years.get(i).playerID;
 			}
