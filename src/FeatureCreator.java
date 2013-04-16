@@ -11,6 +11,8 @@ import java.util.Scanner;
  * @author Shawn Hanna This class holds functions for getting creating features,
  *         given an array of values
  * 
+ * 
+ * 
  */
 
 public class FeatureCreator {
@@ -154,17 +156,16 @@ public class FeatureCreator {
 		return data[(int) (data.length * (100.0 - percent) / 100.0)];
 	}
 
-	static ArrayList<BattingPlayer> getPlayersEra(
-			ArrayList<BattingPlayer> players, int startYear, int endYear) {
-		ArrayList<BattingPlayer> retPlayers = new ArrayList<BattingPlayer>(
-				players.size() / 5);
+	static ArrayList<BattingPlayer> getPlayersEra(ArrayList<BattingPlayer> players, int startYear, int endYear) {
+		ArrayList<BattingPlayer> retPlayers = new ArrayList<BattingPlayer>(players.size() / 5);
+                
 		for (int i = 0; i < players.size(); i++) {
 			BattingPlayer curP = players.get(i);
-			if (curP.getAverageYear() >= startYear
-					&& curP.getAverageYear() <= endYear) {
+			if (curP.getAverageYear() >= startYear && curP.getAverageYear() <= endYear) {
 				retPlayers.add(curP);
 			}
 		}
+                
 		return retPlayers;
 	}
 
