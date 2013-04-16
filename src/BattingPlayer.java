@@ -34,7 +34,7 @@ public class BattingPlayer implements Comparable {
 	public int SF;
 	public int GIDP;
 	public int G_old;
-        public double AvgVSEra;
+	public double AvgVSEra;
 
 	// User created stat/features
 	public boolean isValid = true;
@@ -47,7 +47,7 @@ public class BattingPlayer implements Comparable {
 
 	public void generateCareer() {
 		for (BattingYear year : years) {
-                        yearID += year.yearID;
+			yearID += year.yearID;
 			G += year.G;
 			G_batting += year.G_batting;
 			AB += year.AB;
@@ -82,17 +82,17 @@ public class BattingPlayer implements Comparable {
 			return false;
 		if ((2013 - getLastYear()) < 5)
 			return false;
-                
-                //if(((float)H/(float)AB) < .250) return false;
-                
-                //if(_2B < 116) return false;
-                
-                //if(_3B < 16) return false;
-                
-                //if(HR < 16) return false;
-                
-                //if(RBI < 250) return false;
-                
+
+		// if(((float)H/(float)AB) < .250) return false;
+
+		// if(_2B < 116) return false;
+
+		// if(_3B < 16) return false;
+
+		// if(HR < 16) return false;
+
+		// if(RBI < 250) return false;
+
 		return true;
 	}
 
@@ -115,14 +115,14 @@ public class BattingPlayer implements Comparable {
 
 	public double getAverageBattingAverage() {
 		return ((double) H) / (AB);
-                
+
 	}
 
 	public double getAverageYear() {
-            //System.out.println(yearID);
-            //System.out.println(years.size());
-            return (double)yearID / years.size();
-                
+		// System.out.println(yearID);
+		// System.out.println(years.size());
+		return (double) yearID / years.size();
+
 	}
 
 	public double getAverageGames() {
@@ -193,8 +193,9 @@ public class BattingPlayer implements Comparable {
 			else if (attributes[i].equalsIgnoreCase("battingAverage"))
 				sb.append(getAverageBattingAverage());
 			else if (attributes[i].equalsIgnoreCase("top10perc"))
-				sb.append(HOFPredictor.isTop10Percent(getAverageBattingAverage()));
-                        else if (attributes[i].equalsIgnoreCase("AvgVSEra"))
+				sb.append(HOFPredictor
+						.isTop10Percent(getAverageBattingAverage()));
+			else if (attributes[i].equalsIgnoreCase("AvgVSEra"))
 				sb.append(AvgVSEra);
 			else {
 				System.out.println("ERROR formatting output: " + attributes[i]);
@@ -205,7 +206,7 @@ public class BattingPlayer implements Comparable {
 		return sb.toString();
 	}
 
-        public void setEraDiff(double eraAvg){
-            AvgVSEra = eraAvg - getAverageBattingAverage();
-        }
+	public void setEraDiff(double eraAvg) {
+		AvgVSEra = eraAvg - getAverageBattingAverage();
+	}
 }
