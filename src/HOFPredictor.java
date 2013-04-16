@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -39,9 +40,32 @@ public class HOFPredictor {
 
 		double top10Perc = FeatureCreator.getTopPercentage(averages, 10);
 		System.out.println("Top 10% of batters: " + top10Perc);
-
+                
+                int Eras[] = {1876, 1901, 1920, 1942, 1961, 1977, 1994, 2006, 2013};
+                
+                for(int x = 0; x < Eras.length - 1; x++){
+                    ArrayList<BattingPlayer> temp = FeatureCreator.getPlayersEra(players, Eras[x], Eras[x+1]);
+                    //System.out.println(temp.size());
+                    double temp2[] = FeatureCreator.getBattingAverages(temp);
+                    
+                    double totalAVG = 0;
+                    for(int y = 0 ; y<temp2.length;y++){
+                        totalAVG = totalAVG + temp2[y]; 
+                        //System.out.println(totalAVG);
+                    }
+                    
+                    totalAVG = totalAVG/temp2.length;
+                    
+                    for(BattingPlayer plyr : temp){
+                        plyr.AvgVSEra =  totalAVG - plyr.getAverageBattingAverage();
+                    }
+                    
+                }
+                    
+               
+                
 		String[] importantFields = { "AB", "H", "G", "HR", "battingAverage",
-				"top10perc", "2B", "3B", "RBI", "SB", "BB", "SO" };
+				"top10perc", "2B", "3B", "RBI", "SB", "BB", "SO", "AVGvsERA" };
 
 		try {
 			createARFFfile("outfile.arff", players, importantFields);
